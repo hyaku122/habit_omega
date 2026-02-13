@@ -148,6 +148,7 @@
       display:flex;
       align-items:center;
       gap: 10px;
+      padding: 2px 2px; /* 少しだけ呼吸 */
     }
     .datePill{
       padding: 7px 10px;
@@ -160,7 +161,10 @@
       font-weight: 800;
       min-width: 72px;
       text-align:center;
+      font-size: 14px;
     }
+
+    /* ★ ここが今回のメイン：習慣名＆◯日目をスクショ寄せ */
     .habitName{
       flex:1;
       min-width:0;
@@ -168,23 +172,30 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-size: clamp(18px, 4.8vw, 20px);
+      letter-spacing: .01em;
     }
     .dayCount{
       white-space: nowrap;
       font-weight: 900;
       color: rgba(0,0,0,0.75);
+      font-size: clamp(18px, 4.8vw, 20px);
     }
+
     .deleteSquare{
       width: 44px;
       height: 44px;
       border-radius: 12px;
       border: 1px solid rgba(0,0,0,0.14);
       background: rgba(255,255,255,0.6);
-      font-size: 20px;
+      font-size: 22px;
       line-height: 1;
       cursor: pointer;
       font-weight: 900;
       color: rgba(0,0,0,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
     .deleteSquare:active{ transform: scale(0.98); }
 
@@ -355,7 +366,7 @@
         item.className = "habitItem";
 
         const d = daysFromStart(h.startDate);
-        const dayText = d >= 1 ? `${d}日目` : `未設定`; // 未来日などはそもそも登録させない想定
+        const dayText = d >= 1 ? `${d}日目` : `未設定`;
 
         item.innerHTML = `
           <div class="habitRow">
@@ -391,7 +402,7 @@
         return;
       }
 
-      // 未来日はNG（あなたの方針に合わせて）
+      // 未来日はNG
       const todayISO = toISODateString(new Date());
       if(start > todayISO){
         showToast("未来日は不可です（今日以前にしてね）");
@@ -403,8 +414,6 @@
       saveHabits(habits);
 
       $("habitName").value = "";
-      // 開始日は残したいなら次行を消してOK
-      // $("startDate").value = "";
 
       showToast("追加したよ✍️");
       render();
@@ -429,9 +438,6 @@
 
     // ========= 初期化 =========
     function init(){
-      // 初期開始日を今日にしたい場合（任意）
-      // $("startDate").value = toISODateString(new Date());
-
       $("addBtn").addEventListener("click", addHabit);
       $("resetBtn").addEventListener("click", resetAll);
 
